@@ -143,7 +143,6 @@ namespace IRF_04v2_EHMF1V
 
             Excel.Range lastCol = xlSheet.get_Range(GetCell(2, headerLength), GetCell(lastrowID, headerLength));
             lastCol.Interior.Color = Color.LightGreen;
-            //lastCol.
         }
     }
 }
