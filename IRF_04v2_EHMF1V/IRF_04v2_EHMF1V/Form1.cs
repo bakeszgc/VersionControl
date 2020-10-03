@@ -41,7 +41,7 @@ namespace IRF_04v2_EHMF1V
                 xlWB = xlApp.Workbooks.Add(Missing.Value);
                 xlSheet = xlWB.ActiveSheet;
 
-                //CreateTable();
+                CreateTable();
             }
             catch (Exception ex)
             {
@@ -53,6 +53,29 @@ namespace IRF_04v2_EHMF1V
                 xlWB = null;
                 xlApp = null;
             }
+        }
+
+        private void CreateTable()
+        {
+            string[] headers = new string[]
+            {
+                "Kód",
+                "Eladó",
+                "Oldal",
+                "Kerület",
+                "Lift",
+                "Szobák száma",
+                "Alapterület (m2)",
+                "Ár (mFt)",
+                "Négyzetméter ár (Ft/m2)"
+            };
+
+            for (int i = 0; i < headers.Length; i++)
+            {
+                xlSheet.Cells[1, i+1] = headers[i];
+            }
+
+            object[,] values = new object[Flats.Count, headers.Length];
         }
     }
 }
