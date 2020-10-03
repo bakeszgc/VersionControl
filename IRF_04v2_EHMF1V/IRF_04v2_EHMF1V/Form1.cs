@@ -20,6 +20,7 @@ namespace IRF_04v2_EHMF1V
         Excel.Application xlApp;
         Excel.Workbook xlWB;
         Excel.Worksheet xlSheet;
+        int headerLength;
 
         public Form1()
         {
@@ -55,7 +56,7 @@ namespace IRF_04v2_EHMF1V
             }
         }
 
-        private void CreateTable()
+        public void CreateTable()
         {
             string[] headers = new string[]
             {
@@ -69,6 +70,7 @@ namespace IRF_04v2_EHMF1V
                 "Ár (mFt)",
                 "Négyzetméter ár (Ft/m2)"
             };
+            headerLength = headers.Length;
 
             for (int i = 0; i < headers.Length; i++)
             {
@@ -97,6 +99,8 @@ namespace IRF_04v2_EHMF1V
             xlSheet.get_Range(
                 GetCell(2, 1),
                 GetCell(1 + values.GetLength(0),values.GetLength(1))).Value2 = values;
+
+            FormatTable();
             
         }
 
@@ -115,6 +119,31 @@ namespace IRF_04v2_EHMF1V
             ExcelCoordinate += x.ToString();
 
             return ExcelCoordinate;
+        }
+
+        private void FormatTable()
+        {
+            int lastrowID = xlSheet.UsedRange.Rows.Count;
+
+            Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headerLength));
+            headerRange.Font.Bold = true;
+            headerRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            headerRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            headerRange.EntireColumn.AutoFit();
+            headerRange.RowHeight = 40;
+            headerRange.Interior.Color = Color.LightBlue;
+            headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+            Excel.Range fullRange = xlSheet.get_Range(GetCell(1, 1), GetCell(lastrowID, headerLength));
+            fullRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+            Excel.Range firstCol = xlSheet.get_Range(GetCell(2, 1), GetCell(lastrowID, 1));
+            firstCol.Font.Bold = true;
+            firstCol.Interior.Color = Color.LightYellow;
+
+            Excel.Range lastCol = xlSheet.get_Range(GetCell(2, headerLength), GetCell(lastrowID, headerLength));
+            lastCol.Interior.Color = Color.LightGreen;
+            //lastCol.
         }
     }
 }
