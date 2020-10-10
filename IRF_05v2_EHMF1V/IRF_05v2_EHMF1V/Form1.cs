@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace IRF_05v2_EHMF1V
         PortfolioEntities context = new PortfolioEntities();
         List<PortfolioItem> Portfolio = new List<PortfolioItem>();
         List<Tick> Ticks;
+        
 
         public Form1()
         {
@@ -24,6 +26,7 @@ namespace IRF_05v2_EHMF1V
             dataGridView1.DataSource = Ticks;
 
             CreatePortfolio();
+            CountVaR();
         }
 
         private void CreatePortfolio()
@@ -47,6 +50,61 @@ namespace IRF_05v2_EHMF1V
                 value += (decimal)last.Price * item.Volume;
             }
             return value;
+        }
+
+        public void CountVaR()
+        {
+            List<decimal> Nyereségek = new List<decimal>();
+            int intervalum = 30;
+            DateTime kezdőDátum = (from x in Ticks select x.TradingDay).Min();
+            DateTime záróDátum = new DateTime(2016, 12, 30);
+            TimeSpan z = záróDátum - kezdőDátum;
+            for (int i = 0; i < z.Days - intervalum; i++)
+            {
+                decimal ny = GetPortfolioValue(kezdőDátum.AddDays(i + intervalum))
+                           - GetPortfolioValue(kezdőDátum.AddDays(i));
+                Nyereségek.Add(ny);
+                Console.WriteLine(i + " " + ny);
+            }
+
+            var nyereségekRendezve = (from x in Nyereségek
+                                      orderby x
+                                      select x)
+                                        .ToList();
+            MessageBox.Show(nyereségekRendezve[nyereségekRendezve.Count() / 5].ToString());
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+            SaveFileDialog sfd = new SaveFileDialog();
+
+            sfd.InitialDirectory = Application.StartupPath;
+            sfd.Filter = "Comma Separated Values (*.csv) | *.csv";
+            sfd.DefaultExt = "csv";
+            sfd.AddExtension = true;
+
+            if (sfd.ShowDialog() != DialogResult.OK) return;
+
+            using (StreamWriter sw = new StreamWriter(sfd.FileName,false,Encoding.UTF8))
+            {
+                sw.WriteLine("Időszak,Nyereség");
+
+                int intervalum = 30;
+                DateTime kezdőDátum = (from x in Ticks select x.TradingDay).Min();
+                DateTime záróDátum = new DateTime(2016, 12, 30);
+                TimeSpan z = záróDátum - kezdőDátum;
+                for (int i = 0; i < z.Days - intervalum; i++)
+                {
+                    decimal ny = GetPortfolioValue(kezdőDátum.AddDays(i + intervalum))
+                               - GetPortfolioValue(kezdőDátum.AddDays(i));
+                    
+                    sw.Write(i);
+                    sw.Write(',');
+                    sw.Write(ny);
+                    sw.WriteLine();
+                }
+            }
         }
     }
 }
