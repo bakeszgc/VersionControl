@@ -22,12 +22,9 @@ namespace IRF_06v2_EHMF1V
         public Form1()
         {
             InitializeComponent();
-            ExchangeRates();
-            Feldolgozas();
-            DiagramMegjelenit();
+            RefreshData();
 
             dataGridView1.DataSource = Rates;
-            
         }
 
         private void ExchangeRates()
@@ -35,9 +32,9 @@ namespace IRF_06v2_EHMF1V
             var mnbService = new MNBArfolyamServiceSoapClient();
             var request = new GetExchangeRatesRequestBody()
             {
-                currencyNames="EUR",
-                startDate="2020-01-01",
-                endDate="2020-06-30"
+                currencyNames=comboBox1.SelectedItem.ToString(),
+                startDate=dateTimePicker1.Value.ToString(),
+                endDate=dateTimePicker2.Value.ToString()
             };
             var response = mnbService.GetExchangeRates(request);
             result = response.GetExchangeRatesResult;
@@ -81,6 +78,28 @@ namespace IRF_06v2_EHMF1V
             chartArea.AxisX.MajorGrid.Enabled = false;
             chartArea.AxisY.MajorGrid.Enabled = false;
             chartArea.AxisY.IsStartedFromZero = false;
+        }
+
+        private void RefreshData()
+        {
+            ExchangeRates();
+            Feldolgozas();
+            DiagramMegjelenit();
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshData();
         }
     }
 }
