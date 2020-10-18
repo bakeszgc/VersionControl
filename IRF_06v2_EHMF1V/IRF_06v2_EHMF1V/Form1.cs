@@ -82,6 +82,7 @@ namespace IRF_06v2_EHMF1V
 
         private void RefreshData()
         {
+            Rates.Clear();
             ExchangeRates();
             Feldolgozas();
             DiagramMegjelenit();
