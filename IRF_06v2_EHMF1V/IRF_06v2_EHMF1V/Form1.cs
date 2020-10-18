@@ -17,14 +17,16 @@ namespace IRF_06v2_EHMF1V
     public partial class Form1 : Form
     {
         BindingList<RateData> Rates = new BindingList<RateData>();
+        //BindingList<string> Currencies = new BindingList<string>();
         private string result;
 
         public Form1()
         {
             InitializeComponent();
-            RefreshData();
-
             dataGridView1.DataSource = Rates;
+            //comboBox1.DataSource = Currencies;
+            CurrenciesLekerdez();
+            RefreshData();
         }
 
         private void ExchangeRates()
@@ -101,6 +103,15 @@ namespace IRF_06v2_EHMF1V
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshData();
+        }
+
+        private void CurrenciesLekerdez()
+        {
+            var mnbServiceCurrencies = new MNBArfolyamServiceSoapClient();
+            var requestCurrencies = new GetCurrenciesRequest();
+            var resultCurrencies = requestCurrencies.GetCurrencies;
+
+            Console.WriteLine(resultCurrencies);
         }
     }
 }
