@@ -83,12 +83,12 @@ namespace IRF_07v2_EHMF1V
                 while (!sr.EndOfStream)
                 {
                     var line = sr.ReadLine().Split(';');
-                    birthprob.Add(new BirthProbability()
-                    {
-                        Age = int.Parse(line[0]),
-                        NbrOfChildren = int.Parse(line[1]),
-                        Prob = double.Parse(line[2])
-                    });
+                    
+                    BirthProbability bp = new BirthProbability();
+                    bp.Age = int.Parse(line[0]);
+                    bp.NbrOfChildren = int.Parse(line[1]);
+                    bp.Prob = double.Parse(line[2]);
+                    birthprob.Add(bp);
                 }
             }
             return birthprob;
