@@ -18,6 +18,8 @@ namespace IRF_07v2_EHMF1V
         List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
         List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
 
+        Random rng = new Random(1234);
+
         public Form1()
         {
             InitializeComponent();
@@ -61,9 +63,7 @@ namespace IRF_07v2_EHMF1V
                         Prob = double.Parse(line[2])
                     });
                 }
-                
             }
-
             return birthprob;
         }
 
@@ -83,8 +83,9 @@ namespace IRF_07v2_EHMF1V
                     });
                 }
             }
-
             return deathprob;
         }
+
+        
     }
 }
