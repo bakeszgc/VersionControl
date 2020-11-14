@@ -11,7 +11,7 @@ namespace IRF_08v2_EHMF1V.Entities
     {
         public Toy CreateNew()
         {
-            return new Ball();
+            return new Toy();
         }
     }
 }

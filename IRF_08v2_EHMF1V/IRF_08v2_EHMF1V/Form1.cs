@@ -1,4 +1,5 @@
-﻿using IRF_08v2_EHMF1V.Entities;
+﻿using IRF_08v2_EHMF1V.Abstraction;
+using IRF_08v2_EHMF1V.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,10 +14,10 @@ namespace IRF_08v2_EHMF1V
 {
     public partial class Form1 : Form
     {
-        private List<Ball> _balls = new List<Ball>();
-        private BallFactory _factory;
+        private List<Abstraction.Toy> _toys = new List<Abstraction.Toy>();
+        private IToyFactory _factory;
 
-        public BallFactory Factory
+        public IToyFactory Factory
         {
             get { return _factory; }
             set { _factory = value; }
@@ -31,25 +32,25 @@ namespace IRF_08v2_EHMF1V
 
         private void createTimer_Tick(object sender, EventArgs e)
         {
-            var ball = Factory.CreateNew();
-            _balls.Add(ball);
-            ball.Left = -ball.Width;
-            mainPanel.Controls.Add(ball);
+            var toy = Factory.CreateNew();
+            _toys.Add(toy);
+            toy.Left = -toy.Width;
+            mainPanel.Controls.Add(toy);
         }
 
         private void conveyorTimer_Tick(object sender, EventArgs e)
         {
             var maxPosition = 0;
-            foreach (var b in _balls)
+            foreach (var b in _toys)
             {
-                b.MoveBall();
+                b.MoveToy();
             }
 
             if (maxPosition>1000)
             {
-                var oldestBall = _balls[0];
-                mainPanel.Controls.Remove(oldestBall);
-                _balls.Remove(oldestBall);
+                var oldestToy = _toys[0];
+                mainPanel.Controls.Remove(oldestToy);
+                _toys.Remove(oldestToy);
             }
 
         }
