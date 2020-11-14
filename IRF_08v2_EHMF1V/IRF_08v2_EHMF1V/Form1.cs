@@ -15,12 +15,17 @@ namespace IRF_08v2_EHMF1V
     public partial class Form1 : Form
     {
         private List<Abstraction.Toy> _toys = new List<Abstraction.Toy>();
+        private Abstraction.Toy _nextToy;
         private IToyFactory _factory;
 
         public IToyFactory Factory
         {
             get { return _factory; }
-            set { _factory = value; }
+            set 
+            {
+                _factory = value;
+                DisplayNext();
+            }
         }
 
         public Form1()
@@ -53,6 +58,26 @@ namespace IRF_08v2_EHMF1V
                 _toys.Remove(oldestToy);
             }
 
+        }
+
+        private void carButton_Click(object sender, EventArgs e)
+        {
+            Factory = new CarFactory();
+        }
+
+        private void ballButton_Click(object sender, EventArgs e)
+        {
+            Factory = new BallFactory();
+        }
+
+        private void DisplayNext()
+        {
+            if (_nextToy != null) Controls.Remove(_nextToy);
+
+            _nextToy = Factory.CreateNew();
+            _nextToy.Top = nextLabel.Top + nextLabel.Height + 20;
+            _nextToy.Left = nextLabel.Left;
+            Controls.Add(_nextToy);
         }
     }
 }
