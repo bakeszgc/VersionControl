@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace IRF_08v2_EHMF1V.Entities
 {
-    class Ball : Label
+    public class Ball : Label
     {
         public Ball()
         {
